@@ -12,17 +12,33 @@ export default function NumericInput(props: NumericInputProps) {
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    if (event.target.validity.patternMismatch) {
+        return;
+    }
+
     if (value === "") {
-      setValue(null);
       setLocalVal(null);
-    } else if (value === "-" && allowNegative) {
       setValue(null);
-      setLocalVal(value)
+      return;
+    }
+    
+    if (value[0] === "-") {
+      if (allowNegative && value.length === 1) {
+        setLocalVal(value);
+        return;
+      }
+
+      if (allowNegative && value.length > 1) {
+        setLocalVal(value);
+        setValue(parseInt(value, 10))
+      }
     } else {
+      if (value.includes("-")) {
+        return;
+      }
       const newValue = parseInt(value, 10);
       if (isNaN(newValue)) {
-        setValue(null);
-        setLocalVal(null);
+        return;
       } else {
         setValue(newValue);
         setLocalVal(value)

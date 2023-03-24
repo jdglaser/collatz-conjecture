@@ -33,18 +33,20 @@ function ResultDisplay(props: {res: CalculateResult}) {
     <div>
       <h3>Results</h3>
       <table>
-        <tr>
-          <td>Starting</td>
-          <td>{res.start}</td>
-        </tr>
-        <tr>
-          <td>Max</td>
-          <td>{res.max}</td>
-        </tr>
-        <tr>
-          <td>Difference</td>
-          <td>{res.diff}</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>Starting</td>
+            <td>{res.start.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td>Max</td>
+            <td>{res.max.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td>Difference</td>
+            <td>{res.diff.toLocaleString()}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   )
@@ -75,13 +77,13 @@ function calculateCollatzConjecture(num: number): CalculateResult {
     const equation = resolveEquationString(num);
     resPoints.push(
       {
-        iteration: i,
+        iteration: i+1,
         num,
         previousNum,
         even,
         equation,
         tooltip: `
-          <b>Iteration</b>: ${i}<br>
+          <b>Iteration</b>: ${i+1}<br>
           <b>Value: </b>${nums[i].toLocaleString()}<br>
           <b>Previous Value: </b>${!previousNum ? "N/A" : previousNum.toLocaleString()}<br>
           Number is: <b>${even ? "Even" : "Odd"}</b><br>
@@ -97,7 +99,6 @@ function calculateCollatzConjecture(num: number): CalculateResult {
     max,
     diff: max - originalNum,
   };
-  console.log(res);
   return res;
 }
 
@@ -162,7 +163,20 @@ export default function App() {
                 },
                 hovermode: "closest"
               }}
-              config={{responsive: true}}
+              config={{
+                responsive: true,
+                modeBarButtonsToRemove: [
+                  "lasso2d",
+                  "hoverClosestGl2d",
+                  "toggleHover",
+                  "autoScale2d",
+                  "hoverClosestCartesian",
+                  "hoverCompareCartesian",
+                  "toggleSpikelines",
+                  "pan2d",
+                ],
+                toImageButtonOptions: {filename: `collatz_conjecture_${res.start}`}
+              }}
               style={{width: "100%", height: "100%"}}
               useResizeHandler
             />
